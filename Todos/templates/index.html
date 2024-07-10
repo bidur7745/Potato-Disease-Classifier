@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%);
+
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            animation: floatBackground 10s ease-in-out infinite alternate;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+            border-radius: 16px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f1f1f1;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li h3 {
+            margin: 0;
+            color: #007bff;
+        }
+        li p {
+            margin: 5px 0 0;
+            color: #666;
+        }
+        li a {
+            color: #dc3545;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        li a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes floatBackground {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Todo List</h1>
+        <form action="{% url 'add_todo' %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Enter task" required>
+            <textarea name="description" placeholder="Enter description" required></textarea>
+            <button type="submit">Add</button>
+        </form>
+        <ul>
+            {% for todo in todos %}
+            <li>
+                <div>
+                    <h3>{{ todo.title }}</h3>
+                    <p>{{ todo.description }}</p>
+                </div>
+                <div>
+                    <a href="{% url 'delete' todo.id %}">Delete</a>
+                    <a href="{% url 'show_update' todo.id %}">Update</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <p style="position: fixed; bottom: 10px; right: 10px; color: rgba(32, 13, 83, 0.5); font-size: 14px; transform: rotate(-30deg); z-index: 1000;">
+        © Bidur Siwakoti
+    </p>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
