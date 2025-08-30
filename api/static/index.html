@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potato Disease Classifier</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Potato Disease Classifier</h1>
+            <p class="subtitle">Upload a potato leaf image to detect diseases</p>
+        </header>
+
+        <main>
+            <div class="upload-container">
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-content" id="upload-content">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p>Drag & Drop your image here</p>
+                        <p class="small">or</p>
+                        <label for="file-input" class="upload-button">Browse Files</label>
+                        <input type="file" id="file-input" accept="image/*" hidden>
+                    </div>
+                    <img id="preview-image" class="preview-image hidden" src="" alt="Preview">
+                </div>
+                <button id="analyze-button" class="analyze-button" disabled>Analyze Image</button>
+            </div>
+
+            <div class="results-container hidden" id="results-container">
+                <h2>Analysis Results</h2>
+                <div class="result-card">
+                    <div class="diagnosis">
+                        <h3>Diagnosis:</h3>
+                        <p id="diagnosis-result" class="diagnosis-result"></p>
+                    </div>
+                    <div class="confidence">
+                        <h3>Confidence:</h3>
+                        <div class="confidence-bar-container">
+                            <div id="confidence-bar" class="confidence-bar"></div>
+                            <span id="confidence-value"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detailed-results">
+                    <h3>Detailed Results:</h3>
+                    <div id="detailed-results" class="probabilities"></div>
+                </div>
+                <button id="new-analysis" class="new-analysis-button">Analyze Another Image</button>
+            </div>
+        </main>
+
+        <div class="info-section">
+            <div class="info-card">
+                <h3>About Potato Diseases</h3>
+                <p>Early detection of potato diseases can help farmers take timely action and prevent crop loss. This tool uses AI to identify common potato diseases from leaf images.</p>
+            </div>
+            <div class="info-card">
+                <h3>How to Use</h3>
+                <p>1. Upload a clear image of a potato leaf</p>
+                <p>2. Click "Analyze Image"</p>
+                <p>3. View the diagnosis and confidence level</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Powered by LeafNet AI Model | &copy; 2023 Potato Disease Classifier</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

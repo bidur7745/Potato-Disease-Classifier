@@ -1,0 +1,26 @@
+seed: 42
+classes: [
+  potato_early_blight,
+  potato_late_blight,
+  potato_common_scab,
+  potato_black_scurf,
+  potato_virus_y
+]
+
+data:
+  train_dir: data/train
+  val_dir: data/val
+  test_dir: data/test
+  img_size: 224
+  batch_size: 32
+  num_workers: 4
+
+optim:
+  lr: 0.0008
+  weight_decay: 0.0001
+  epochs: 15
+
+model:
+  arch: mobilenet_v3_small
+  pretrained: true
+  dropout: 0.1
