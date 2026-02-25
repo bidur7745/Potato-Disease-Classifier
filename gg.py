@@ -9,21 +9,35 @@ IMAGES_PER_QUERY = 40   # 15 queries × 40 ≈ 600 images
 
 QUERIES = [
 
-    # Everyday objects
-    "random everyday objects",
-    "household items on table",
-    "kitchen utensils close up",
-    "office desk items",
-    "tools and hardware objects",
-    "plastic objects",
-    "metal objects",
-    "wooden objects",
-    "fabric textures",
+    
+  
 
-    # Indoor scenes
-    "indoor scene",
-    "living room interior",
-    "bedroom interior",
+    # Nature & background variety
+    "grass field",
+    "soil ground texture",
+    "tree bark texture",
+    "cloudy sky",
+    "sunset landscape",
+    "rainy weather scene",
+    "foggy morning",
+
+      # Close-up / macro diversity
+    "macro photography texture",
+    "blurred background bokeh",
+    "low light indoor photo",
+    "overexposed image example",
+    "motion blur image",
+
+
+    # Human presence (for realism diversity)
+    "people walking",
+    "crowd in market",
+    "farmer working in field",
+    "person using smartphone",
+    "children playing outside",
+
+  
+      "bedroom interior",
     "kitchen interior",
     "classroom interior",
     "shopping mall interior",
@@ -41,29 +55,6 @@ QUERIES = [
     "city skyline",
     "construction site",
     "park with people",
-
-    # Nature & background variety
-    "grass field",
-    "soil ground texture",
-    "tree bark texture",
-    "cloudy sky",
-    "sunset landscape",
-    "rainy weather scene",
-    "foggy morning",
-
-    # Human presence (for realism diversity)
-    "people walking",
-    "crowd in market",
-    "farmer working in field",
-    "person using smartphone",
-    "children playing outside",
-
-    # Close-up / macro diversity
-    "macro photography texture",
-    "blurred background bokeh",
-    "low light indoor photo",
-    "overexposed image example",
-    "motion blur image"
 ]
 
 # ==============================

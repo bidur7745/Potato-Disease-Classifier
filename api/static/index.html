@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Maize Disease Check</title>
+  <title>Crop Disease Check</title>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: system-ui, sans-serif; max-width: 480px; margin: 2rem auto; padding: 0 1rem; }
+    body { font-family: system-ui, sans-serif; max-width: 520px; margin: 2rem auto; padding: 0 1rem; }
     h1 { font-size: 1.25rem; }
+    label { display: block; margin: 0.5rem 0 0.2rem; }
+    select { padding: 0.4rem; min-width: 160px; }
     input[type="file"] { margin: 0.5rem 0; display: block; }
     button { padding: 0.5rem 1rem; cursor: pointer; margin: 0.25rem 0.25rem 0.25rem 0; }
     #preview { max-width: 100%; max-height: 200px; margin: 0.5rem 0; border: 1px solid #ccc; }
@@ -16,20 +18,27 @@
   </style>
 </head>
 <body>
-  <h1>Maize Disease Check</h1>
+  <h1>Crop Disease Check</h1>
+  <label for="crop">Crop</label>
+  <select id="crop">
+    <option value="tomato">Tomato</option>
+    <option value="maize">Maize</option>
+  </select>
+  <label for="file">Image</label>
   <input type="file" id="file" accept="image/*" />
   <img id="preview" alt="Preview" style="display: none;" />
   <div>
     <button type="button" id="btnLeaf">Check leaf / non-leaf</button>
-    <button type="button" id="btnDisease">Check disease</button>
+    <button type="button" id="btnPredict">Predict disease</button>
   </div>
   <div id="result"></div>
 
   <script>
+    const cropSelect = document.getElementById('crop');
     const fileInput = document.getElementById('file');
     const preview = document.getElementById('preview');
     const btnLeaf = document.getElementById('btnLeaf');
-    const btnDisease = document.getElementById('btnDisease');
+    const btnPredict = document.getElementById('btnPredict');
     const result = document.getElementById('result');
 
     fileInput.addEventListener('change', (e) => {
@@ -50,40 +59,62 @@
     }
 
     function showDiseaseResult(data) {
-      let text = 'Prediction: ' + data.class + '\nConfidence: ' + (data.confidence * 100).toFixed(2) + '%\n\nProbabilities:\n';
+      let text = 'Leaf check: ' + data.leaf_check.class + ' (' + (data.leaf_check.confidence * 100).toFixed(2) + '%)\n\n';
+      text += 'Disease: ' + data.class + '\nConfidence: ' + (data.confidence * 100).toFixed(2) + '%\n\nProbabilities:\n';
       text += Object.entries(data.probabilities).map(([k, v]) => k + ': ' + (v * 100).toFixed(2) + '%').join('\n');
-      if (data.low_confidence && data.warning) {
-        text = '<span class="error">' + data.warning + '</span><br><br>' + text;
-      }
       result.innerHTML = text.replace(/\n/g, '<br>');
     }
 
-    async function doRequest(url, label) {
+    async function doCheckLeaf() {
       const f = fileInput.files[0];
-      if (!f) {
-        showError('Please select an image.');
-        return;
-      }
-      result.textContent = 'Predicting...';
+      if (!f) { showError('Please select an image.'); return; }
+      result.textContent = 'Checking...';
       const form = new FormData();
       form.append('file', f);
       try {
-        const r = await fetch(url, { method: 'POST', body: form });
+        const r = await fetch('/check-leaf', { method: 'POST', body: form });
         const data = await r.json();
         if (!r.ok) {
           const msg = typeof data.detail === 'string' ? data.detail : (data.detail && data.detail.msg) || JSON.stringify(data.detail) || r.statusText;
           showError(msg);
           return;
         }
-        if (url === '/check-leaf') showLeafResult(data);
-        else showDiseaseResult(data);
+        showLeafResult(data);
       } catch (e) {
         showError('Request failed: ' + e.message);
       }
     }
 
-    btnLeaf.addEventListener('click', () => doRequest('/check-leaf', 'leaf'));
-    btnDisease.addEventListener('click', () => doRequest('/predict', 'disease'));
+    async function doPredict() {
+      const f = fileInput.files[0];
+      if (!f) { showError('Please select an image.'); return; }
+      const crop = cropSelect.value;
+      result.textContent = 'Predicting...';
+      const form = new FormData();
+      form.append('file', f);
+      form.append('crop', crop);
+      try {
+        const r = await fetch('/predict', { method: 'POST', body: form });
+        const data = await r.json();
+        if (!r.ok) {
+          const msg = typeof data.detail === 'string' ? data.detail : (data.detail && data.detail.msg) || JSON.stringify(data.detail) || r.statusText;
+          showError(msg);
+          return;
+        }
+        showDiseaseResult(data);
+      } catch (e) {
+        showError('Request failed: ' + e.message);
+      }
+    }
+
+    btnLeaf.addEventListener('click', doCheckLeaf);
+    btnPredict.addEventListener('click', doPredict);
+
+    fetch('/info').then(r => r.json()).then(info => {
+      if (info.crops && info.crops.length) {
+        cropSelect.innerHTML = info.crops.map(c => '<option value="' + c + '">' + c.charAt(0).toUpperCase() + c.slice(1) + '</option>').join('');
+      }
+    }).catch(() => {});
   </script>
 </body>
 </html>
